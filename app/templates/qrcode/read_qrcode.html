@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_utils %}
+{% block content %}
+    <div id="top" class="row">
+        <div class="col-sm-3">
+            <h2> Read QRCode</h2>
+        </div>
+    </div> <!-- /#top -->
+    <hr/>
+    <div class="row">
+        <div class="col-sm-6">
+            <div style="width: 100%" id="reader"></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="text-center hidden" id="detail">
+                <div class="form-group">
+                    <label>Key</label>
+                    <input type="text" name="key" id="key" value="" class="form-control"
+                           style="width: 500px; display: inline-block;"/>
+                </div>
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="text" name="id" id="id" value="" class="form-control"
+                           style="width: 500px; display: inline-block;"/>
+                </div>
+                <div class="form-group">
+                    <label>NAME</label>
+                    <input type="text" name="name" id="name" value="" class="form-control"
+                           style="width: 500px; display: inline-block;"/>
+                </div>
+                <div class="form-group">
+                    <label>IMAGE_URL</label>
+                    <input type="text" name="image_url" id="image_url" value="" class="form-control"
+                           style="width: 500px; display: inline-block;"/>
+                    <img id="image_url_img" src="" class="img-responsive img-thumbnail" style="max-height: 100px;"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <audio preload="auto" id="axxx">
+        <source type="audio/wav" src="{% static 'win_audio.wav' %}"></source>
+        Not supported
+    </audio>
+    <script src="{% static 'node_modules/html5-qrcode/html5-qrcode.min.js' %}"></script>
+    <script type="text/javascript">
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Handle on success condition with the decoded text or result.
+            console.log(`Scan result: ${decodedText}`, decodedResult);
+            validateQrCode(decodedText);
+            document.getElementById("key").value = decodedText;
+            {#html5QrcodeScanner.clear();#}
+        }
+
+        function validateQrCode(key) {
+            $.ajax({
+                url: "{% url 'validate' %}",
+                type: "POST",
+                data: {
+                    'key': key
+                },
+                success: function (data) {
+                    $('#axxx').get(0).play();
+                    console.log(data);
+                    document.getElementById("detail").classList.remove("hidden");
+                    var qrcode = data['qrcode'];
+                    document.getElementById("id").value = qrcode.id;
+                    document.getElementById("name").value = qrcode.name;
+                    document.getElementById("image_url").value = qrcode.image_url;
+                    document.getElementById("image_url_img").src = qrcode.image_url;
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Invalid QR Code");
+                }
+            });
+        }
+
+        function onScanError(errorMessage) {
+            console.log(errorMessage);
+        }
+
+
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", {fps: 10, qrbox: 300});
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
+
+        $(document).ready(function () {
+
+        });
+    </script>
+
+{% endblock %}
