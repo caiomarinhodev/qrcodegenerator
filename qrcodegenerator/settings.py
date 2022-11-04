@@ -122,7 +122,7 @@ STATIC_URL = '/static/'
 
 INSTALLED_APPS += ['rest_framework', 'rest_framework.authtoken', 'django.contrib.sites', 'allauth', 'allauth.account',
                    'allauth.socialaccount', 'rest_auth', 'rest_auth.registration', 'corsheaders', 'app',
-                   'django_filters']
+                   'django_filters', 'database_manager']
 
 SITE_ID = 1
 
@@ -160,3 +160,6 @@ CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET',
                                   'WIU52UMg6lglL_OmrH3Pe1Gbrzk')
 CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME',
                                   'help-m-sician')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

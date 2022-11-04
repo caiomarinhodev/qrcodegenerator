@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_utils %}
+{% block content %}
+    <a class="btn btn-default" href="{% url 'database' %}">Back</a>
+    <h2>Upload File</h2>
+    <div class="row">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Load</button>
+        </form>
+    </div>
+
+{% endblock %}

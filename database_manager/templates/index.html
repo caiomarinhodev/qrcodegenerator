@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_utils %}
+{% block content %}
+    <h2>Dashboard</h2>
+    <div class="row">
+        <div class="col-md-3 ">
+            <a class="btn btn-default btn-block btn-lg" href="{% url 'dump' %}" target="_blank">Dump Database</a>
+        </div>
+        <div class="col-md-3 ">
+            <a class="btn btn-primary btn-block btn-lg" href="{% url 'load' %}">Load Database</a>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        {% for model, value in data.items %}
+            <div class="col-xs-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <label>{{ model }}</label>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>Qtd: </label>
+                            <label>{{ value.count }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
